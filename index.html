@@ -80,206 +80,670 @@
             color: var(--secondary-color);
         }
 
-        .input-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
+        .table-wrapper { overflow-x: auto; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+            min-width: 600px;
         }
 
-        .input-group {
-            display: flex;
-            flex-direction: column;
+        th, td {
+            padding: 0.75rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .input-group label {
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--text-color);
-        }
-
-        .input-group input {
+        th {
             background-color: var(--primary-color-light);
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            padding: 0.5rem;
-            color: var(--text-color);
-            font-size: 1rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            white-space: nowrap;
         }
 
-        .input-group input:focus {
+        input[type="number"] {
+            background-color: #333;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 0.5rem;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 120px;
+            font-family: monospace;
+        }
+
+        input[type="number"]:focus {
             outline: none;
             border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(102, 187, 106, 0.2);
         }
 
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-
-        .result-card {
-            background-color: rgba(255, 255, 255, 0.05);
-            padding: 1rem;
-            border-radius: 4px;
-            border: 1px solid var(--border-color);
-        }
-
-        .result-label {
-            font-size: 0.85rem;
-            color: var(--text-color-light);
-            margin-bottom: 0.25rem;
-        }
-
-        .result-value {
-            font-size: 1.25rem;
+        input[readonly] {
+            background-color: transparent;
+            border: none;
+            color: var(--secondary-color);
             font-weight: bold;
-            color: var(--primary-color);
+            text-align: center;
         }
 
-        .calculate-btn {
+        .component-inputs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: var(--primary-color-light);
+            border-radius: var(--border-radius);
+        }
+
+        .input-group { display: flex; flex-direction: column; gap: 0.25rem; }
+        .input-group label { font-size: 0.9rem; color: var(--text-color-light); font-weight: bold;}
+
+        .computed-val { color: var(--primary-color); font-weight: bold; }
+        .diff-high { color: #ef5350; } 
+        .diff-low { color: #ffa726; } 
+        .diff-good { color: var(--primary-color); } 
+
+        .btn-group { display: flex; gap: 1rem; margin-top: 1rem; }
+        
+        .btn {
             background-color: var(--primary-color-dark);
             color: white;
             border: none;
             padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            border-radius: 4px;
+            border-radius: var(--border-radius);
             cursor: pointer;
-            width: 100%;
-            margin-bottom: 1.5rem;
-            transition: background-color 0.2s;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+        .btn:hover { opacity: 0.9; }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary-color-dark);
+            color: var(--primary-color);
         }
 
-        .calculate-btn:hover {
-            background-color: var(--primary-color);
-        }
+        footer { text-align: center; margin-top: 2rem; color: var(--text-color-light); font-size: 0.8rem;}
+        
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>PHYS 42 Lab Calculator</h1>
-    <p>AC Series RLC Circuit Analysis</p>
-</header>
+    <header>
+        <h1>PHYS 42 AC Circuits Lab</h1>
+        <p>Data Entry & Automated Calculation Tool</p>
+    </header>
 
-<div class="container">
-    <section>
-        <h2>Circuit Parameters</h2>
-        <div class="formula-box">
-            Z = &radic;(R&sup2; + (X<sub>L</sub> - X<sub>C</sub>)&sup2;)
-        </div>
-        
-        <div class="input-grid">
-            <div class="input-group">
-                <label for="voltage">V<sub>supply</sub> (Volts)</label>
-                <input type="number" id="voltage" step="0.01" value="3.00">
-            </div>
-            <div class="input-group">
-                <label for="frequency">Frequency (Hz)</label>
-                <input type="number" id="frequency" step="1" value="60">
-            </div>
-            <div class="input-group">
-                <label for="resistance">Resistance R (&Omega;)</label>
-                <input type="number" id="resistance" step="0.1" value="100">
-            </div>
-            <div class="input-group">
-                <label for="inductance">Inductance L (mH)</label>
-                <input type="number" id="inductance" step="0.1" value="10">
-            </div>
-            <div class="input-group">
-                <label for="capacitance">Capacitance C (&mu;F)</label>
-                <input type="number" id="capacitance" step="0.1" value="100">
-            </div>
-        </div>
+    <div class="container">
 
-        <button class="calculate-btn" onclick="calculate()">Calculate Values</button>
+        <section>
+            <h2>Manage Data</h2>
+            <p>Data saves automatically to your browser. Use buttons to save to file.</p>
+            <div class="btn-group">
+                <button id="btn-export" class="btn">Export JSON</button>
+                <label class="btn btn-outline">
+                    Import JSON
+                    <input type="file" id="file-import" accept=".json" class="sr-only">
+                </label>
+                <button id="btn-clear" class="btn" style="background-color: #d32f2f;">Reset All</button>
+            </div>
+        </section>
 
-        <h2>Calculated Results</h2>
-        <div class="results-grid">
-            <div class="result-card">
-                <div class="result-label">Inductive Reactance (X<sub>L</sub>)</div>
-                <div class="result-value" id="res-xl">0.00 &Omega;</div>
+        <section id="part1">
+            <h2>Part 1: RC Circuit</h2>
+            
+            <div class="component-inputs">
+                <div class="input-group">
+                    <label>Measured R (Ω)</label>
+                    <input type="number" id="p1_R" step="0.1" oninput="calcPart1()">
+                </div>
+                <div class="input-group">
+                    <label>Measured C (µF)</label>
+                    <input type="number" id="p1_C" step="0.01" oninput="calcPart1()">
+                </div>
             </div>
-            <div class="result-card">
-                <div class="result-label">Capacitive Reactance (X<sub>C</sub>)</div>
-                <div class="result-value" id="res-xc">0.00 &Omega;</div>
-            </div>
-            <div class="result-card">
-                <div class="result-label">Impedance (Z)</div>
-                <div class="result-value" id="res-z">0.00 &Omega;</div>
-            </div>
-            <div class="result-card">
-                <div class="result-label">Current (I<sub>rms</sub>)</div>
-                <div class="result-value" id="res-i">0.000 A</div>
-            </div>
-            <div class="result-card">
-                <div class="result-label">Voltage across R (V<sub>R</sub>)</div>
-                <div class="result-value" id="res-vr">0.00 V</div>
-            </div>
-            <div class="result-card">
-                <div class="result-label">Voltage across L (V<sub>L</sub>)</div>
-                <div class="result-value" id="res-vl">0.00 V</div>
-            </div>
-            <div class="result-card">
-                <div class="result-label">Voltage across C (V<sub>C</sub>)</div>
-                <div class="result-value" id="res-vc">0.00 V</div>
-            </div>
-            <div class="result-card">
-                <div class="result-label">Phase Angle (&phi;)</div>
-                <div class="result-value" id="res-phi">0.00&deg;</div>
-            </div>
-        </div>
-    </section>
-</div>
 
-<script>
-    function calculate() {
-        const V = parseFloat(document.getElementById('voltage').value);
-        const f = parseFloat(document.getElementById('frequency').value);
-        const R = parseFloat(document.getElementById('resistance').value);
-        const L_mH = parseFloat(document.getElementById('inductance').value);
-        const C_uF = parseFloat(document.getElementById('capacitance').value);
+            <div class="formula-box">
+                Calculations:<br>
+                I = V<sub>R</sub> / R &nbsp;|&nbsp; X<sub>C</sub>(comp) = V<sub>C</sub> / I &nbsp;|&nbsp; X<sub>C</sub>(theo) = 1 / (2πfC)<br>
+                Phase(comp) = arctan(-X<sub>C</sub> / R)
+            </div>
 
-        if (isNaN(V) || isNaN(f) || isNaN(R) || isNaN(L_mH) || isNaN(C_uF)) {
-            alert("Please enter valid numbers for all fields.");
-            return;
+            <h3>Table 1.1: Voltages & Current</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>f (kHz)</th>
+                            <th>V<sub>supply</sub> (V)</th>
+                            <th>V<sub>R</sub> (V)</th>
+                            <th>V<sub>C</sub> (V)</th>
+                            <th>I (A) [Calc]</th>
+                        </tr>
+                    </thead>
+                    <tbody id="p1_table1">
+                        <tr data-freq="1">
+                            <td>1</td>
+                            <td><input type="number" id="p1_1k_Vs" value="3.00" step="0.01" oninput="calcPart1()"></td>
+                            <td><input type="number" id="p1_1k_Vr" step="0.01" oninput="calcPart1()"></td>
+                            <td><input type="number" id="p1_1k_Vc" step="0.01" oninput="calcPart1()"></td>
+                            <td class="computed-val" id="p1_1k_I">--</td>
+                        </tr>
+                        <tr data-freq="2">
+                            <td>2</td>
+                            <td><input type="number" id="p1_2k_Vs" value="3.00" step="0.01" oninput="calcPart1()"></td>
+                            <td><input type="number" id="p1_2k_Vr" step="0.01" oninput="calcPart1()"></td>
+                            <td><input type="number" id="p1_2k_Vc" step="0.01" oninput="calcPart1()"></td>
+                            <td class="computed-val" id="p1_2k_I">--</td>
+                        </tr>
+                        <tr data-freq="3">
+                            <td>3</td>
+                            <td><input type="number" id="p1_3k_Vs" value="3.00" step="0.01" oninput="calcPart1()"></td>
+                            <td><input type="number" id="p1_3k_Vr" step="0.01" oninput="calcPart1()"></td>
+                            <td><input type="number" id="p1_3k_Vc" step="0.01" oninput="calcPart1()"></td>
+                            <td class="computed-val" id="p1_3k_I">--</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Table 1.2: Reactance (X<sub>C</sub>)</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>f (kHz)</th>
+                            <th>I (A)</th>
+                            <th>X<sub>C</sub> (Ω) Comp</th>
+                            <th>X<sub>C</sub> (Ω) Theo</th>
+                            <th>% Diff</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td id="p1_1k_I_copy">--</td>
+                            <td class="computed-val" id="p1_1k_Xc_comp">--</td>
+                            <td class="computed-val" id="p1_1k_Xc_theo">--</td>
+                            <td id="p1_1k_Xc_diff">--</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td id="p1_2k_I_copy">--</td>
+                            <td class="computed-val" id="p1_2k_Xc_comp">--</td>
+                            <td class="computed-val" id="p1_2k_Xc_theo">--</td>
+                            <td id="p1_2k_Xc_diff">--</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td id="p1_3k_I_copy">--</td>
+                            <td class="computed-val" id="p1_3k_Xc_comp">--</td>
+                            <td class="computed-val" id="p1_3k_Xc_theo">--</td>
+                            <td id="p1_3k_Xc_diff">--</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Table 1.3: Phase Angle (ϕ)</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>f (kHz)</th>
+                            <th>ϕ (deg) Comp</th>
+                            <th>ϕ (deg) Measured</th>
+                            <th>% Diff</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td class="computed-val" id="p1_1k_phi_comp">--</td>
+                            <td><input type="number" id="p1_1k_phi_meas" step="0.1" oninput="calcPart1()"></td>
+                            <td id="p1_1k_phi_diff">--</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td class="computed-val" id="p1_2k_phi_comp">--</td>
+                            <td><input type="number" id="p1_2k_phi_meas" step="0.1" oninput="calcPart1()"></td>
+                            <td id="p1_2k_phi_diff">--</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td class="computed-val" id="p1_3k_phi_comp">--</td>
+                            <td><input type="number" id="p1_3k_phi_meas" step="0.1" oninput="calcPart1()"></td>
+                            <td id="p1_3k_phi_diff">--</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="part2">
+            <h2>Part 2: RL Circuit</h2>
+            
+            <div class="component-inputs">
+                <div class="input-group">
+                    <label>Measured R (Ω)</label>
+                    <input type="number" id="p2_R" step="0.1" oninput="calcPart2()">
+                </div>
+                <div class="input-group">
+                    <label>Measured L (H)</label>
+                    <input type="number" id="p2_L" step="0.001" oninput="calcPart2()">
+                </div>
+                <div class="input-group">
+                    <label>Measured r (internal Ω)</label>
+                    <input type="number" id="p2_r_int" step="0.1" oninput="calcPart2()">
+                </div>
+            </div>
+
+            <div class="formula-box">
+                Calculations:<br>
+                V<sub>r</sub> = I * r &nbsp;|&nbsp; V<sub>coil</sub> = sqrt(V<sub>L</sub>² - V<sub>r</sub>²)<br>
+                X<sub>L</sub>(comp) = V<sub>coil</sub> / I &nbsp;|&nbsp; X<sub>L</sub>(theo) = 2πfL<br>
+                Phase(comp) = arctan(X<sub>L</sub> / R)
+            </div>
+
+            <h3>Table 2.1: Voltages & Internal Resistance</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>f (kHz)</th>
+                            <th>V<sub>supply</sub> (V)</th>
+                            <th>V<sub>R</sub> (V)</th>
+                            <th>V<sub>L</sub> (V)</th>
+                            <th>V<sub>r</sub> (V) [Calc]</th>
+                            <th>V<sub>coil</sub> (V) [Calc]</th>
+                            <th>I (A) [Calc]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td><input type="number" id="p2_1k_Vs" value="3.00" oninput="calcPart2()"></td>
+                            <td><input type="number" id="p2_1k_Vr" oninput="calcPart2()"></td>
+                            <td><input type="number" id="p2_1k_Vl" oninput="calcPart2()"></td>
+                            <td class="computed-val" id="p2_1k_Vr_int">--</td>
+                            <td class="computed-val" id="p2_1k_Vcoil">--</td>
+                            <td class="computed-val" id="p2_1k_I">--</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><input type="number" id="p2_2k_Vs" value="3.00" oninput="calcPart2()"></td>
+                            <td><input type="number" id="p2_2k_Vr" oninput="calcPart2()"></td>
+                            <td><input type="number" id="p2_2k_Vl" oninput="calcPart2()"></td>
+                            <td class="computed-val" id="p2_2k_Vr_int">--</td>
+                            <td class="computed-val" id="p2_2k_Vcoil">--</td>
+                            <td class="computed-val" id="p2_2k_I">--</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><input type="number" id="p2_3k_Vs" value="3.00" oninput="calcPart2()"></td>
+                            <td><input type="number" id="p2_3k_Vr" oninput="calcPart2()"></td>
+                            <td><input type="number" id="p2_3k_Vl" oninput="calcPart2()"></td>
+                            <td class="computed-val" id="p2_3k_Vr_int">--</td>
+                            <td class="computed-val" id="p2_3k_Vcoil">--</td>
+                            <td class="computed-val" id="p2_3k_I">--</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Table 2.2: Reactance (X<sub>L</sub>)</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>f (kHz)</th>
+                            <th>X<sub>L</sub> (Ω) Comp</th>
+                            <th>X<sub>L</sub> (Ω) Theo</th>
+                            <th>% Diff</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td class="computed-val" id="p2_1k_Xl_comp">--</td>
+                            <td class="computed-val" id="p2_1k_Xl_theo">--</td>
+                            <td id="p2_1k_Xl_diff">--</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td class="computed-val" id="p2_2k_Xl_comp">--</td>
+                            <td class="computed-val" id="p2_2k_Xl_theo">--</td>
+                            <td id="p2_2k_Xl_diff">--</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td class="computed-val" id="p2_3k_Xl_comp">--</td>
+                            <td class="computed-val" id="p2_3k_Xl_theo">--</td>
+                            <td id="p2_3k_Xl_diff">--</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Table 2.3: Phase Angle (ϕ)</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>f (kHz)</th>
+                            <th>ϕ (deg) Comp</th>
+                            <th>ϕ (deg) Measured</th>
+                            <th>% Diff</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td class="computed-val" id="p2_1k_phi_comp">--</td>
+                            <td><input type="number" id="p2_1k_phi_meas" step="0.1" oninput="calcPart2()"></td>
+                            <td id="p2_1k_phi_diff">--</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td class="computed-val" id="p2_2k_phi_comp">--</td>
+                            <td><input type="number" id="p2_2k_phi_meas" step="0.1" oninput="calcPart2()"></td>
+                            <td id="p2_2k_phi_diff">--</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td class="computed-val" id="p2_3k_phi_comp">--</td>
+                            <td><input type="number" id="p2_3k_phi_meas" step="0.1" oninput="calcPart2()"></td>
+                            <td id="p2_3k_phi_diff">--</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="part3">
+            <h2>Part 3: RLC Resonance</h2>
+            
+            <div class="formula-box">
+                Calculation:<br>
+                f<sub>res</sub> = 1 / (2π * sqrt(L * C))<br>
+                (Uses L and C from previous sections)
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div>
+                    <h3>Frequency Sweep Data</h3>
+                    <div class="table-wrapper" style="max-height: 400px; overflow-y: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>f (Hz)</th>
+                                    <th>V<sub>R</sub> (V)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="p3_table">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div>
+                    <h3>Resonance Results</h3>
+                    <div class="input-group" style="margin-bottom: 1rem;">
+                        <label>Measured Peak Frequency (Hz)</label>
+                        <input type="number" id="p3_f_meas" placeholder="Dial value" oninput="calcPart3()">
+                    </div>
+                    <div class="input-group" style="margin-bottom: 1rem;">
+                        <label>Measured Max V<sub>R</sub> (V)</label>
+                        <input type="number" id="p3_Vr_max" placeholder="Max Voltage">
+                    </div>
+
+                    <div style="background-color: var(--primary-color-light); padding: 1rem; border-radius: 4px; border: 1px solid var(--border-color);">
+                        <div style="margin-bottom: 0.5rem;">
+                            <span>Computed Theoretical f<sub>res</sub>:</span><br>
+                            <strong class="computed-val" id="p3_f_theo" style="font-size: 1.5rem;">-- Hz</strong>
+                        </div>
+                        <div>
+                            <span>Difference:</span><br>
+                            <strong id="p3_diff">--</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>PHYS 42 Lab Tool | Calculations accurate to sig fig inputs</p>
+    </footer>
+
+    <script>
+        function getVal(id) {
+            const el = document.getElementById(id);
+            if (!el) return null;
+            const v = parseFloat(el.value);
+            return isNaN(v) ? null : v;
         }
 
-        const L = L_mH / 1000; 
-        const C = C_uF / 1000000; 
-        const omega = 2 * Math.PI * f;
-
-        const XL = omega * L;
-        const XC = (f === 0 || C === 0) ? 0 : 1 / (omega * C);
-        
-        const Z = Math.sqrt(Math.pow(R, 2) + Math.pow(XL - XC, 2));
-        const I = Z === 0 ? 0 : V / Z;
-
-        const VR = I * R;
-        const VL = I * XL;
-        const VC = I * XC;
-        
-        let phi = 0;
-        if (R !== 0) {
-            phi = Math.atan((XL - XC) / R) * (180 / Math.PI);
-        } else if (XL > XC) {
-            phi = 90;
-        } else if (XC > XL) {
-            phi = -90;
+        function setVal(id, val, units = "") {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (val === null || isNaN(val) || !isFinite(val)) {
+                el.innerText = "--";
+                el.className = "computed-val";
+            } else {
+                el.innerText = val.toPrecision(4) + (units ? " " + units : "");
+            }
         }
 
-        document.getElementById('res-xl').innerHTML = XL.toFixed(2) + " &Omega;";
-        document.getElementById('res-xc').innerHTML = XC.toFixed(2) + " &Omega;";
-        document.getElementById('res-z').innerHTML = Z.toFixed(2) + " &Omega;";
-        document.getElementById('res-i').innerHTML = I.toFixed(4) + " A";
-        document.getElementById('res-vr').innerHTML = VR.toFixed(2) + " V";
-        document.getElementById('res-vl').innerHTML = VL.toFixed(2) + " V";
-        document.getElementById('res-vc').innerHTML = VC.toFixed(2) + " V";
-        document.getElementById('res-phi').innerHTML = phi.toFixed(2) + "&deg;";
-    }
+        function setDiff(id, percent) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (percent === null || isNaN(percent) || !isFinite(percent)) {
+                el.innerText = "--";
+                el.className = "";
+                return;
+            }
+            el.innerText = percent.toFixed(2) + "%";
+            if (Math.abs(percent) < 5) el.className = "diff-good";
+            else if (Math.abs(percent) < 10) el.className = "diff-low";
+            else el.className = "diff-high";
+        }
 
-    window.onload = calculate;
-</script>
+        function calcDiff(meas, theo) {
+            if (meas === null || theo === null) return null;
+            return (Math.abs(Math.abs(meas) - Math.abs(theo)) / Math.abs(theo)) * 100;
+        }
 
+        (function initPart3Table() {
+            const tbody = document.getElementById('p3_table');
+            for (let f = 200; f <= 3000; f += 200) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${f}</td>
+                    <td><input type="number" id="p3_f${f}_Vr" step="0.01"></td>
+                `;
+                tbody.appendChild(tr);
+            }
+        })();
+
+        function calcPart1() {
+            const R = getVal('p1_R');
+            const C_uF = getVal('p1_C');
+            const C = C_uF ? C_uF * 1e-6 : null;
+
+            const freqs = [1, 2, 3];
+
+            freqs.forEach(f_kHz => {
+                const f = f_kHz * 1000;
+                const prefix = `p1_${f_kHz}k`;
+
+                const Vr = getVal(`${prefix}_Vr`);
+                const Vc = getVal(`${prefix}_Vc`);
+                
+                const phi_meas = getVal(`${prefix}_phi_meas`);
+
+                let I = null;
+                if (R && Vr) I = Vr / R;
+                setVal(`${prefix}_I`, I);
+                setVal(`${prefix}_I_copy`, I);
+
+                let Xc_comp = null;
+                if (Vc && I) Xc_comp = Vc / I;
+                setVal(`${prefix}_Xc_comp`, Xc_comp);
+
+                let Xc_theo = null;
+                if (C) Xc_theo = 1 / (2 * Math.PI * f * C);
+                setVal(`${prefix}_Xc_theo`, Xc_theo);
+
+                setDiff(`${prefix}_Xc_diff`, calcDiff(Xc_comp, Xc_theo));
+
+                let phi_comp = null;
+                if (Xc_comp !== null && R) {
+                    phi_comp = Math.atan(-Xc_comp / R) * (180 / Math.PI);
+                }
+                setVal(`${prefix}_phi_comp`, phi_comp);
+
+                setDiff(`${prefix}_phi_diff`, calcDiff(phi_meas, phi_comp));
+            });
+
+            saveData();
+        }
+
+        function calcPart2() {
+            const R = getVal('p2_R');
+            const L = getVal('p2_L');
+            const r = getVal('p2_r_int');
+
+            const freqs = [1, 2, 3];
+
+            freqs.forEach(f_kHz => {
+                const f = f_kHz * 1000;
+                const prefix = `p2_${f_kHz}k`;
+
+                const Vr = getVal(`${prefix}_Vr`);
+                const Vl = getVal(`${prefix}_Vl`);
+                
+                const phi_meas = getVal(`${prefix}_phi_meas`);
+
+                let I = null;
+                if (R && Vr) I = Vr / R;
+                setVal(`${prefix}_I`, I);
+
+                let Vr_int = null;
+                if (I && r) Vr_int = I * r;
+                setVal(`${prefix}_Vr_int`, Vr_int);
+
+                let Vcoil = null;
+                if (Vl !== null && Vr_int !== null) {
+                    const term = (Vl * Vl) - (Vr_int * Vr_int);
+                    Vcoil = term >= 0 ? Math.sqrt(term) : 0;
+                }
+                setVal(`${prefix}_Vcoil`, Vcoil);
+
+                let Xl_comp = null;
+                if (Vcoil !== null && I > 0) Xl_comp = Vcoil / I;
+                setVal(`${prefix}_Xl_comp`, Xl_comp);
+
+                let Xl_theo = null;
+                if (L) Xl_theo = 2 * Math.PI * f * L;
+                setVal(`${prefix}_Xl_theo`, Xl_theo);
+
+                setDiff(`${prefix}_Xl_diff`, calcDiff(Xl_comp, Xl_theo));
+
+                let phi_comp = null;
+                if (Xl_comp !== null && R) {
+                    phi_comp = Math.atan(Xl_comp / R) * (180 / Math.PI);
+                }
+                setVal(`${prefix}_phi_comp`, phi_comp);
+
+                setDiff(`${prefix}_phi_diff`, calcDiff(phi_meas, phi_comp));
+            });
+
+            saveData();
+        }
+
+        function calcPart3() {
+            const L = getVal('p2_L');
+            const C_uF = getVal('p1_C');
+            const C = C_uF ? C_uF * 1e-6 : null;
+            const f_meas = getVal('p3_f_meas');
+
+            let f_theo = null;
+            if (L && C) {
+                f_theo = 1 / (2 * Math.PI * Math.sqrt(L * C));
+            }
+            setVal('p3_f_theo', f_theo);
+            setDiff('p3_diff', calcDiff(f_meas, f_theo));
+            saveData();
+        }
+
+        function saveData() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            const data = {};
+            inputs.forEach(inp => {
+                if (inp.id) data[inp.id] = inp.value;
+            });
+            localStorage.setItem('phys42LabData', JSON.stringify(data));
+        }
+
+        function loadData() {
+            const stored = localStorage.getItem('phys42LabData');
+            if (stored) {
+                const data = JSON.parse(stored);
+                for (const [id, val] of Object.entries(data)) {
+                    const el = document.getElementById(id);
+                    if (el) el.value = val;
+                }
+                calcPart1();
+                calcPart2();
+                calcPart3();
+            }
+        }
+
+        document.getElementById('btn-export').addEventListener('click', () => {
+            const stored = localStorage.getItem('phys42LabData');
+            if (!stored) return alert("No data to export!");
+            const blob = new Blob([stored], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'phys42_lab_data.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
+
+        document.getElementById('file-import').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    localStorage.setItem('phys42LabData', JSON.stringify(data));
+                    loadData();
+                } catch (err) {
+                    alert("Invalid JSON file");
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        document.getElementById('btn-clear').addEventListener('click', () => {
+            if(confirm("Clear all data?")) {
+                localStorage.removeItem('phys42LabData');
+                const inputs = document.querySelectorAll('input');
+                inputs.forEach(i => i.value = '');
+                calcPart1(); calcPart2(); calcPart3();
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', loadData);
+
+    </script>
 </body>
 </html>
