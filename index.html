@@ -6,7 +6,6 @@
     <title>PHYS 42: AC Circuits Lab Calculator</title>
     <style>
         :root {
-            /* Forced Dark/Green Theme */
             --primary-color: #66bb6a;
             --primary-color-dark: #388e3c;
             --primary-color-light: #2e2e2e;
@@ -32,7 +31,6 @@
             padding-bottom: 4rem;
         }
 
-        /* Layout */
         header {
             background-color: var(--card-bg);
             border-bottom: 2px solid var(--primary-color);
@@ -53,14 +51,12 @@
             gap: 2rem;
         }
 
-        /* Sections */
         section {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
             padding: 1.5rem;
-            /* Green outline effect */
             border-left: 4px solid var(--primary-color-dark);
         }
 
@@ -73,7 +69,6 @@
 
         h3 { color: var(--secondary-color); margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 1.1rem; }
 
-        /* Formulas */
         .formula-box {
             background-color: rgba(129, 199, 132, 0.1);
             border: 1px dashed var(--primary-color-dark);
@@ -85,7 +80,6 @@
             color: var(--secondary-color);
         }
 
-        /* Tables */
         .table-wrapper { overflow-x: auto; }
         
         table {
@@ -108,7 +102,6 @@
             white-space: nowrap;
         }
 
-        /* Inputs */
         input[type="number"] {
             background-color: #333;
             border: 1px solid var(--border-color);
@@ -134,7 +127,6 @@
             text-align: center;
         }
 
-        /* Component Inputs */
         .component-inputs {
             display: flex;
             flex-wrap: wrap;
@@ -148,13 +140,11 @@
         .input-group { display: flex; flex-direction: column; gap: 0.25rem; }
         .input-group label { font-size: 0.9rem; color: var(--text-color-light); font-weight: bold;}
 
-        /* Utility Classes */
         .computed-val { color: var(--primary-color); font-weight: bold; }
-        .diff-high { color: #ef5350; } /* Red for high diff */
-        .diff-low { color: #ffa726; } /* Orange for warning */
-        .diff-good { color: var(--primary-color); } /* Green for good */
+        .diff-high { color: #ef5350; } 
+        .diff-low { color: #ffa726; } 
+        .diff-good { color: var(--primary-color); } 
 
-        /* Buttons */
         .btn-group { display: flex; gap: 1rem; margin-top: 1rem; }
         
         .btn {
@@ -177,7 +167,6 @@
 
         footer { text-align: center; margin-top: 2rem; color: var(--text-color-light); font-size: 0.8rem;}
         
-        /* Hide file input */
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
     </style>
 </head>
@@ -300,20 +289,13 @@
             </div>
 
             <h3>Table 1.3: Phase Angle (ϕ)</h3>
-            <div class="formula-box">
-                Oscilloscope Calculation:<br>
-                ϕ = (Δt / T) * 360<br>
-                <em>Note: Enter T and Δt in the same units (e.g., both in divisions or both in seconds).</em>
-            </div>
             <div class="table-wrapper">
                 <table>
                     <thead>
                         <tr>
                             <th>f (kHz)</th>
                             <th>ϕ (deg) Comp</th>
-                            <th>Period T (div or s)</th>
-                            <th>Shift Δt (div or s)</th>
-                            <th>ϕ (deg) Scope [Calc]</th>
+                            <th>ϕ (deg) Measured</th>
                             <th>% Diff</th>
                         </tr>
                     </thead>
@@ -321,25 +303,19 @@
                         <tr>
                             <td>1</td>
                             <td class="computed-val" id="p1_1k_phi_comp">--</td>
-                            <td><input type="number" id="p1_1k_T" step="0.1" oninput="calcPart1()"></td>
-                            <td><input type="number" id="p1_1k_dt" step="0.1" oninput="calcPart1()"></td>
-                            <td class="computed-val" id="p1_1k_phi_scope">--</td>
+                            <td><input type="number" id="p1_1k_phi_meas" step="0.1" oninput="calcPart1()"></td>
                             <td id="p1_1k_phi_diff">--</td>
                         </tr>
                         <tr>
                             <td>2</td>
                             <td class="computed-val" id="p1_2k_phi_comp">--</td>
-                            <td><input type="number" id="p1_2k_T" step="0.1" oninput="calcPart1()"></td>
-                            <td><input type="number" id="p1_2k_dt" step="0.1" oninput="calcPart1()"></td>
-                            <td class="computed-val" id="p1_2k_phi_scope">--</td>
+                            <td><input type="number" id="p1_2k_phi_meas" step="0.1" oninput="calcPart1()"></td>
                             <td id="p1_2k_phi_diff">--</td>
                         </tr>
                         <tr>
                             <td>3</td>
                             <td class="computed-val" id="p1_3k_phi_comp">--</td>
-                            <td><input type="number" id="p1_3k_T" step="0.1" oninput="calcPart1()"></td>
-                            <td><input type="number" id="p1_3k_dt" step="0.1" oninput="calcPart1()"></td>
-                            <td class="computed-val" id="p1_3k_phi_scope">--</td>
+                            <td><input type="number" id="p1_3k_phi_meas" step="0.1" oninput="calcPart1()"></td>
                             <td id="p1_3k_phi_diff">--</td>
                         </tr>
                     </tbody>
@@ -459,9 +435,7 @@
                         <tr>
                             <th>f (kHz)</th>
                             <th>ϕ (deg) Comp</th>
-                            <th>Period T (div or s)</th>
-                            <th>Shift Δt (div or s)</th>
-                            <th>ϕ (deg) Scope [Calc]</th>
+                            <th>ϕ (deg) Measured</th>
                             <th>% Diff</th>
                         </tr>
                     </thead>
@@ -469,25 +443,19 @@
                         <tr>
                             <td>1</td>
                             <td class="computed-val" id="p2_1k_phi_comp">--</td>
-                            <td><input type="number" id="p2_1k_T" step="0.1" oninput="calcPart2()"></td>
-                            <td><input type="number" id="p2_1k_dt" step="0.1" oninput="calcPart2()"></td>
-                            <td class="computed-val" id="p2_1k_phi_scope">--</td>
+                            <td><input type="number" id="p2_1k_phi_meas" step="0.1" oninput="calcPart2()"></td>
                             <td id="p2_1k_phi_diff">--</td>
                         </tr>
                         <tr>
                             <td>2</td>
                             <td class="computed-val" id="p2_2k_phi_comp">--</td>
-                            <td><input type="number" id="p2_2k_phi_meas" step="1" oninput="calcPart2()"></td>
-                            <td><input type="number" id="p2_2k_dt" step="0.1" oninput="calcPart2()"></td>
-                            <td class="computed-val" id="p2_2k_phi_scope">--</td>
+                            <td><input type="number" id="p2_2k_phi_meas" step="0.1" oninput="calcPart2()"></td>
                             <td id="p2_2k_phi_diff">--</td>
                         </tr>
                         <tr>
                             <td>3</td>
                             <td class="computed-val" id="p2_3k_phi_comp">--</td>
-                            <td><input type="number" id="p2_3k_T" step="0.1" oninput="calcPart2()"></td>
-                            <td><input type="number" id="p2_3k_dt" step="0.1" oninput="calcPart2()"></td>
-                            <td class="computed-val" id="p2_3k_phi_scope">--</td>
+                            <td><input type="number" id="p2_3k_phi_meas" step="0.1" oninput="calcPart2()"></td>
                             <td id="p2_3k_phi_diff">--</td>
                         </tr>
                     </tbody>
@@ -553,7 +521,6 @@
     </footer>
 
     <script>
-        // --- Helper Functions ---
         function getVal(id) {
             const el = document.getElementById(id);
             if (!el) return null;
@@ -591,7 +558,6 @@
             return (Math.abs(Math.abs(meas) - Math.abs(theo)) / Math.abs(theo)) * 100;
         }
 
-        // --- Part 3 Table Generator ---
         (function initPart3Table() {
             const tbody = document.getElementById('p3_table');
             for (let f = 200; f <= 3000; f += 200) {
@@ -604,8 +570,6 @@
             }
         })();
 
-        // --- CALCULATIONS ---
-
         function calcPart1() {
             const R = getVal('p1_R');
             const C_uF = getVal('p1_C');
@@ -617,49 +581,33 @@
                 const f = f_kHz * 1000;
                 const prefix = `p1_${f_kHz}k`;
 
-                // Inputs
                 const Vr = getVal(`${prefix}_Vr`);
                 const Vc = getVal(`${prefix}_Vc`);
                 
-                // Scope Inputs
-                const T = getVal(`${prefix}_T`);
-                const dt = getVal(`${prefix}_dt`);
+                const phi_meas = getVal(`${prefix}_phi_meas`);
 
-                // 1. Current
                 let I = null;
                 if (R && Vr) I = Vr / R;
                 setVal(`${prefix}_I`, I);
                 setVal(`${prefix}_I_copy`, I);
 
-                // 2. Xc Computed
                 let Xc_comp = null;
                 if (Vc && I) Xc_comp = Vc / I;
                 setVal(`${prefix}_Xc_comp`, Xc_comp);
 
-                // 3. Xc Theo
                 let Xc_theo = null;
                 if (C) Xc_theo = 1 / (2 * Math.PI * f * C);
                 setVal(`${prefix}_Xc_theo`, Xc_theo);
 
-                // 4. Xc Diff
                 setDiff(`${prefix}_Xc_diff`, calcDiff(Xc_comp, Xc_theo));
 
-                // 5. Phase Computed
                 let phi_comp = null;
                 if (Xc_comp !== null && R) {
                     phi_comp = Math.atan(-Xc_comp / R) * (180 / Math.PI);
                 }
                 setVal(`${prefix}_phi_comp`, phi_comp);
 
-                // 6. Phase Scope Calculation
-                let phi_scope = null;
-                if (T && dt) {
-                    phi_scope = (dt / T) * 360;
-                }
-                setVal(`${prefix}_phi_scope`, phi_scope);
-
-                // 7. Phase Diff
-                setDiff(`${prefix}_phi_diff`, calcDiff(phi_scope, phi_comp));
+                setDiff(`${prefix}_phi_diff`, calcDiff(phi_meas, phi_comp));
             });
 
             saveData();
@@ -679,21 +627,16 @@
                 const Vr = getVal(`${prefix}_Vr`);
                 const Vl = getVal(`${prefix}_Vl`);
                 
-                // Scope Inputs
-                const T = getVal(`${prefix}_T`);
-                const dt = getVal(`${prefix}_dt`);
+                const phi_meas = getVal(`${prefix}_phi_meas`);
 
-                // 1. Current
                 let I = null;
                 if (R && Vr) I = Vr / R;
                 setVal(`${prefix}_I`, I);
 
-                // 2. Vr_int
                 let Vr_int = null;
                 if (I && r) Vr_int = I * r;
                 setVal(`${prefix}_Vr_int`, Vr_int);
 
-                // 3. Vcoil
                 let Vcoil = null;
                 if (Vl !== null && Vr_int !== null) {
                     const term = (Vl * Vl) - (Vr_int * Vr_int);
@@ -701,35 +644,23 @@
                 }
                 setVal(`${prefix}_Vcoil`, Vcoil);
 
-                // 4. XL Comp
                 let Xl_comp = null;
                 if (Vcoil !== null && I > 0) Xl_comp = Vcoil / I;
                 setVal(`${prefix}_Xl_comp`, Xl_comp);
 
-                // 5. XL Theo
                 let Xl_theo = null;
                 if (L) Xl_theo = 2 * Math.PI * f * L;
                 setVal(`${prefix}_Xl_theo`, Xl_theo);
 
-                // 6. XL Diff
                 setDiff(`${prefix}_Xl_diff`, calcDiff(Xl_comp, Xl_theo));
 
-                // 7. Phase Comp
                 let phi_comp = null;
                 if (Xl_comp !== null && R) {
                     phi_comp = Math.atan(Xl_comp / R) * (180 / Math.PI);
                 }
                 setVal(`${prefix}_phi_comp`, phi_comp);
 
-                // 8. Phase Scope Calc
-                let phi_scope = null;
-                if (T && dt) {
-                    phi_scope = (dt / T) * 360;
-                }
-                setVal(`${prefix}_phi_scope`, phi_scope);
-
-                // 9. Phase Diff
-                setDiff(`${prefix}_phi_diff`, calcDiff(phi_scope, phi_comp));
+                setDiff(`${prefix}_phi_diff`, calcDiff(phi_meas, phi_comp));
             });
 
             saveData();
@@ -750,7 +681,6 @@
             saveData();
         }
 
-        // --- DATA PERSISTENCE ---
         function saveData() {
             const inputs = document.querySelectorAll('input[type="number"]');
             const data = {};
@@ -774,7 +704,6 @@
             }
         }
 
-        // --- FILE EXPORT/IMPORT ---
         document.getElementById('btn-export').addEventListener('click', () => {
             const stored = localStorage.getItem('phys42LabData');
             if (!stored) return alert("No data to export!");
